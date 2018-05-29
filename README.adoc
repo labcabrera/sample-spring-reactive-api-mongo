@@ -4,4 +4,10 @@
 Ejemplo de WebFlux con una API REST con Mongo.
 
 
+----
+curl http://localhost:8080/pets
+
+curl http://localhost:8080/pets/${petId}
+
 curl -d '{"name":"Chinaski","gender":"Male"}' -H "Content-Type: application/json" http://localhost:8080/pets
+----
