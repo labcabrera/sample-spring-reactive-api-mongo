@@ -1,0 +1,47 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.2.RELEASE'
+        useProxy = true
+    }
+    repositories {
+        if(useProxy) {
+            maven { url "http://nexus:8080/nexus/content/groups/public/" }
+        } else {    
+            mavenCentral()
+        }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+bootJar {
+    baseName = 'gs-reactive-rest-service'
+    version =  '0.1.0'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+    if(useProxy) {
+        maven { url "http://nexus:8080/nexus/content/groups/public/" }
+    } else {    
+        mavenCentral()
+    }
+}
+
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-webflux')
+    compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
+    compile('org.projectlombok:lombok')
+    //compile('org.projectlombok:lombok:1.16.22')
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile('io.projectreactor:reactor-test')
+}

@@ -1,0 +1,7 @@
+
+= Spring Reactive API
+
+Ejemplo de WebFlux con una API REST con Mongo.
+
+
+curl -d '{"name":"Chinaski","gender":"Male"}' -H "Content-Type: application/json" http://localhost:8080/pets

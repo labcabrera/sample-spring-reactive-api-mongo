@@ -1,0 +1,7 @@
+spring:
+  data:
+    mongodb:
+      host: 172.18.0.2
+      #database: test
+      #username: dummyUsername
+      #password: dummyPassword
