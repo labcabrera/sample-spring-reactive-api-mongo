@@ -11,11 +11,11 @@ import org.springframework.web.reactive.function.server.RequestPredicates;
 import org.springframework.web.reactive.function.server.RouterFunction;
 
 @Configuration
-public class PetStoreRouter {
+public class PetClinicRouter {
 
 	@Bean
 	RouterFunction<?> routes(PetHandler handler) { //@formatter:off
-		return nest(path("/pets"),
+		return nest(path("/api/v1/pets"),
 
 			route(RequestPredicates.GET("/{id}"), handler::findById)
 			.andRoute(RequestPredicates.GET(""), handler::findAll)

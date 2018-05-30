@@ -1,13 +1,142 @@
-
 = Spring Reactive API
 
-Ejemplo de WebFlux con una API REST con Mongo.
+Aplicación reactive de ejemplo basada en WebFlux. La aplicación es la clásica
+https://github.com/spring-projects/spring-petclinic[clínica de mascotas]. 
 
+Utilizamos _spring-boot-starter-data-mongodb-reactive_ para persistir la información.
 
+== Reactive Mongo
+
+Igual que sus equivalentes no basados en WebFlux simplemente tendremos que declarar las interfaces
+extendiendo tanto de `ReactiveMongoRepository` como de `ReactiveCrudRepository`:
+
+[source,java]
 ----
-curl http://localhost:8080/pets
+public interface CustomerRepository extends ReactiveMongoRepository<Customer, String> {
 
-curl http://localhost:8080/pets/${petId}
+  Flux<Customer> findByFirstNameAndLastName(String firstName, String lastName);
 
-curl -d '{"name":"Chinaski","gender":"Male"}' -H "Content-Type: application/json" http://localhost:8080/pets
+}
+----
+
+
+[source,java]
+----
+public interface PetRepository extends ReactiveCrudRepository<Pet, String> {
+
+  Flux<Pet> findByName(String name);
+
+}
+----
+
+== API
+
+Hay dos formas de exponer nuestra API. La primera es similar a la forma no-reactiva, declarando
+un `@RestController` y anotando los diferentes métodos de nuestra interface:
+
+[source,java]
+----
+@RestController
+@RequestMapping("/api/v1/customers")
+public class CustomerController {
+
+	@Autowired
+	private CustomerService customerService;
+
+	@GetMapping
+	public Flux<Customer> findAll() { ...	}
+
+	@GetMapping("/{id}")
+	public Mono<Customer> findOne(@PathVariable String id) { ... }
+
+	@PostMapping
+	@ResponseStatus(HttpStatus.CREATED)
+	public Mono<Customer> create(@RequestBody Customer customer) { ... }
+
+	@DeleteMapping("/{id}")
+	public Mono<Boolean> delete(@PathVariable String id) { ... }
+
+  // ....
+}
+----
+
+También tenemos la posibilidad de definir un bean que se encargue de mapear los endpoints a nuestros
+handlers del siguiente modo:
+
+[source,java]
+----
+@Configuration
+public class PetClinicRouter {
+
+	@Bean
+	RouterFunction<?> routes(PetHandler handler) {
+		return nest(path("/api/v1/pets"),
+
+			route(RequestPredicates.GET("/{id}"), handler::findById)
+			.andRoute(RequestPredicates.GET(""), handler::findAll)
+			.andRoute(RequestPredicates.POST(""), handler::save)
+			
+		);
+	}
+}
+----
+
+Y los métodos que devolvamos en nuestro handler tendrán simplemente que devolver un `Mono<ServerResponse>`:
+
+[source,java]
+----
+@Component
+@AllArgsConstructor
+public class PetHandler {
+
+	private final PetRepository repository;
+	private final ReactiveMongoOperations operations;
+
+	public Mono<ServerResponse> findById(ServerRequest request) { ... }
+
+	public Mono<ServerResponse> findAll(ServerRequest request) { ... }
+
+	public Mono<ServerResponse> save(ServerRequest request) { ... }
+
+}
+----
+
+
+== Probando nuestra API
+
+A través de la consola podremos comprobar que nuestra API responde del modo esperado.
+
+A continuación mostramos algunos ejemplos de llamadas.
+
+[source,bash]
+----
+
+# Insert customer
+curl \
+  -d '{"firstName":"John","lastName":"Doe","contactInfo":{"email": "johndoe@mailserver.org"}}' \
+  -H "Content-Type: application/json" \
+  http://localhost:8080/api/v1/customers
+
+# Update customer
+curl  \
+  -X PUT \
+  -d '{"firstName":"John","lastName":"Smith","contactInfo":{"email": "johnsmith@mailserver.org","phoneNumber": "555 444 888"}}' \
+  -H "Content-Type: application/json" \
+  http://localhost:8080/api/v1/customers/5b0e956f5d77bd37c58537aa
+
+# Find all customers
+curl http://localhost:8080/api/v1/customers
+
+# Insert pet
+curl \
+  -d '{"name":"Chinaski","gender":"Male","customer":{"id":"5b0e956f5d77bd37c58537aa"}}' \
+  -H "Content-Type: application/json" \
+  http://localhost:8080/api/v1/pets
+
+# Find pet by id
+curl http://localhost:8080/api/v1/pets/${petId}
+
+# Find all pets
+curl http://localhost:8080/api/v1/pets
+
 ----
