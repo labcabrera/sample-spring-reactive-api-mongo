@@ -7,15 +7,15 @@ import reactor.core.publisher.Mono;
 
 public interface CustomerService {
 
-	Mono<Customer> createCustomer(Customer customer);
-
-	Mono<Customer> updateCustomer(String id, Customer customer);
+	Mono<Customer> findOne(String id);
 
 	Flux<Customer> findAll();
 
-	Mono<Customer> findOne(String id);
-
 	Flux<Customer> findByFirstNameAndLastName(String firstName, String lastName);
+
+	Mono<Customer> createCustomer(Customer customer);
+
+	Mono<Customer> updateCustomer(String id, Customer customer);
 
 	Mono<Boolean> delete(String id);
 }

@@ -39,8 +39,8 @@ public class CustomerController {
 
 	@GetMapping("/find")
 	public Flux<Customer> find( //@formatter:off
-		@RequestParam("firstName") String firstName,
-		@RequestParam("lastName") String lastName) { //@formatter:on
+		@RequestParam String firstName,
+		@RequestParam String lastName) { //@formatter:on
 		return customerService.findByFirstNameAndLastName(firstName, lastName);
 	}
 
@@ -56,7 +56,7 @@ public class CustomerController {
 	}
 
 	@PutMapping("/{id}")
-	public Mono<Customer> updateBlog(@PathVariable String id, @RequestBody Customer blog) {
-		return customerService.updateCustomer(id, blog);
+	public Mono<Customer> update(@PathVariable String id, @RequestBody @Valid Customer customer) {
+		return customerService.updateCustomer(id, customer);
 	}
 }
