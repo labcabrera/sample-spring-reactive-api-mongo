@@ -27,7 +27,11 @@ public class InitializationService {
 		log.info("Initializing database");
 		Flux<Customer> customers = Flux.just( //@formatter:off
 			customer("John", "Doe"),
-			customer("Franz", "Kafka")); //@formatter:on
+			customer("John", "Smith"),
+			customer("Franz", "Kafka"),
+			customer("Milan", "Kundera"),
+			customer("Paul", "Auster")
+		); //@formatter:on
 		customerRepository.saveAll(customers).subscribe();
 	}
 
