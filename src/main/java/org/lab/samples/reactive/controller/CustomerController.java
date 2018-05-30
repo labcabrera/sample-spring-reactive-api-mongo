@@ -1,5 +1,7 @@
 package org.lab.samples.reactive.controller;
 
+import javax.validation.Valid;
+
 import org.lab.samples.reactive.domain.Customer;
 import org.lab.samples.reactive.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class CustomerController {
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Mono<Customer> create(@RequestBody Customer customer) {
+	public Mono<Customer> create(@RequestBody @Valid Customer customer) {
 		return customerService.createCustomer(customer);
 	}
 

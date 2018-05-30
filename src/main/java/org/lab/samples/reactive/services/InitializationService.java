@@ -1,7 +1,5 @@
 package org.lab.samples.reactive.services;
 
-import java.util.List;
-
 import org.lab.samples.reactive.domain.Customer;
 import org.lab.samples.reactive.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 @Component
 @Slf4j
@@ -28,15 +25,10 @@ public class InitializationService {
 
 	private void initialize() {
 		log.info("Initializing database");
-
-		Flux<Customer> customers = Flux.just(
+		Flux<Customer> customers = Flux.just( //@formatter:off
 			customer("John", "Doe"),
-			customer("Franz", "Kafka"));
-		
-		customerRepository.saveAll(customers);
-		
-		Mono<List<Customer>> tmp = customers.collectList();
-
+			customer("Franz", "Kafka")); //@formatter:on
+		customerRepository.saveAll(customers).subscribe();
 	}
 
 	private Customer customer(String firstName, String lastName) {
