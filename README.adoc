@@ -8,23 +8,13 @@ Utilizamos _spring-boot-starter-data-mongodb-reactive_ para persistir la informa
 == Reactive Mongo
 
 Igual que sus equivalentes no basados en WebFlux simplemente tendremos que declarar las interfaces
-extendiendo tanto de `ReactiveMongoRepository` como de `ReactiveCrudRepository`:
+extendiendo de `ReactiveMongoRepository`:
 
 [source,java]
 ----
 public interface CustomerRepository extends ReactiveMongoRepository<Customer, String> {
 
   Flux<Customer> findByFirstNameAndLastName(String firstName, String lastName);
-
-}
-----
-
-
-[source,java]
-----
-public interface PetRepository extends ReactiveCrudRepository<Pet, String> {
-
-  Flux<Pet> findByName(String name);
 
 }
 ----
