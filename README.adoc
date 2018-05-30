@@ -56,7 +56,8 @@ public class CustomerController {
 	@DeleteMapping("/{id}")
 	public Mono<Boolean> delete(@PathVariable String id) { ... }
 
-  // ....
+  // ...
+
 }
 ----
 
@@ -89,8 +90,7 @@ Y los métodos que devolvamos en nuestro handler tendrán simplemente que devolv
 @AllArgsConstructor
 public class PetHandler {
 
-	private final PetRepository repository;
-	private final ReactiveMongoOperations operations;
+  // ...
 
 	public Mono<ServerResponse> findById(ServerRequest request) { ... }
 
@@ -122,14 +122,14 @@ curl  \
   -X PUT \
   -d '{"firstName":"John","lastName":"Smith","contactInfo":{"email": "johnsmith@mailserver.org","phoneNumber": "555 444 888"}}' \
   -H "Content-Type: application/json" \
-  http://localhost:8080/api/v1/customers/5b0e956f5d77bd37c58537aa
+  http://localhost:8080/api/v1/customers/${customerId}
 
 # Find all customers
 curl http://localhost:8080/api/v1/customers
 
 # Insert pet
 curl \
-  -d '{"name":"Chinaski","gender":"Male","customer":{"id":"5b0e956f5d77bd37c58537aa"}}' \
+  -d '{"name":"Chinaski","gender":"Male","customer":{"id":"${customerId}"}}' \
   -H "Content-Type: application/json" \
   http://localhost:8080/api/v1/pets
 
