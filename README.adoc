@@ -40,21 +40,21 @@ un `@RestController` y anotando los diferentes métodos de nuestra interface:
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
 
-	@Autowired
-	private CustomerService customerService;
+  @Autowired
+  private CustomerService customerService;
 
-	@GetMapping
-	public Flux<Customer> findAll() { ...	}
+  @GetMapping
+  public Flux<Customer> findAll() { ...	}
 
-	@GetMapping("/{id}")
-	public Mono<Customer> findOne(@PathVariable String id) { ... }
+  @GetMapping("/{id}")
+  public Mono<Customer> findOne(@PathVariable String id) { ... }
 
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Mono<Customer> create(@RequestBody Customer customer) { ... }
+  @PostMapping
+  @ResponseStatus(HttpStatus.CREATED)
+  public Mono<Customer> create(@RequestBody Customer customer) { ... }
 
-	@DeleteMapping("/{id}")
-	public Mono<Boolean> delete(@PathVariable String id) { ... }
+  @DeleteMapping("/{id}")
+  public Mono<Boolean> delete(@PathVariable String id) { ... }
 
   // ...
 
@@ -69,16 +69,16 @@ handlers del siguiente modo:
 @Configuration
 public class PetClinicRouter {
 
-	@Bean
-	RouterFunction<?> routes(PetHandler handler) {
-		return nest(path("/api/v1/pets"),
+  @Bean
+  RouterFunction<?> routes(PetHandler handler) {
+    return nest(path("/api/v1/pets"),
 
-			route(RequestPredicates.GET("/{id}"), handler::findById)
-			.andRoute(RequestPredicates.GET(""), handler::findAll)
-			.andRoute(RequestPredicates.POST(""), handler::save)
-			
-		);
-	}
+      route(RequestPredicates.GET("/{id}"), handler::findById)
+      .andRoute(RequestPredicates.GET(""), handler::findAll)
+      .andRoute(RequestPredicates.POST(""), handler::save)
+      
+    );
+  }
 }
 ----
 
@@ -92,11 +92,11 @@ public class PetHandler {
 
   // ...
 
-	public Mono<ServerResponse> findById(ServerRequest request) { ... }
+  public Mono<ServerResponse> findById(ServerRequest request) { ... }
 
-	public Mono<ServerResponse> findAll(ServerRequest request) { ... }
+  public Mono<ServerResponse> findAll(ServerRequest request) { ... }
 
-	public Mono<ServerResponse> save(ServerRequest request) { ... }
+  public Mono<ServerResponse> save(ServerRequest request) { ... }
 
 }
 ----
