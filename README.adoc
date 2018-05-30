@@ -80,13 +80,13 @@ Y los métodos que devolvamos en nuestro handler tendrán simplemente que devolv
 @AllArgsConstructor
 public class PetHandler {
 
-  // ...
-
   public Mono<ServerResponse> findById(ServerRequest request) { ... }
 
   public Mono<ServerResponse> findAll(ServerRequest request) { ... }
 
   public Mono<ServerResponse> save(ServerRequest request) { ... }
+
+  // ...
 
 }
 ----
@@ -102,12 +102,14 @@ A continuación mostramos algunos ejemplos de llamadas.
 ----
 
 # Insert customer
+
 curl \
   -d '{"firstName":"John","lastName":"Doe","contactInfo":{"email": "johndoe@mailserver.org"}}' \
   -H "Content-Type: application/json" \
   http://localhost:8080/api/v1/customers
 
 # Update customer
+
 curl  \
   -X PUT \
   -d '{"firstName":"John","lastName":"Smith","contactInfo":{"email": "johnsmith@mailserver.org","phoneNumber": "555 444 888"}}' \
@@ -115,21 +117,26 @@ curl  \
   http://localhost:8080/api/v1/customers/${customerId}
 
 # Find all customers
+
 curl http://localhost:8080/api/v1/customers
 
 # Find customer
-curl 'http://localhost:8080/api/v1/customers/find?firstName=John&lastName='
+
+curl 'http://localhost:8080/api/v1/customers/find?firstName=John&lastName=Doe'
 
 # Insert pet
+
 curl \
   -d '{"name":"Chinaski","gender":"Male","customer":{"id":"${customerId}"}}' \
   -H "Content-Type: application/json" \
   http://localhost:8080/api/v1/pets
 
 # Find pet by id
+
 curl http://localhost:8080/api/v1/pets/${petId}
 
 # Find all pets
+
 curl http://localhost:8080/api/v1/pets
 
 ----
