@@ -14,15 +14,13 @@ import org.springframework.web.reactive.function.server.RouterFunction;
 public class PetClinicRouter {
 
 	@Bean
-	RouterFunction<?> routes(PetHandler handler) { //@formatter:off
+	RouterFunction<?> routes(PetHandler handler) {
 		return nest(path("/api/v1/pets"),
-
 			route(RequestPredicates.GET("/{id}"), handler::findById)
-			.andRoute(RequestPredicates.GET(""), handler::findAll)
-			.andRoute(RequestPredicates.POST(""), handler::save)
-			
-		);
+				.andRoute(RequestPredicates.GET(""), handler::findAll)
+				.andRoute(RequestPredicates.POST(""), handler::save)
 
-	} //@formatter:on
+		);
+	}
 
 }

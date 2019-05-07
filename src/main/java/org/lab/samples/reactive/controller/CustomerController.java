@@ -38,9 +38,9 @@ public class CustomerController {
 	}
 
 	@GetMapping("/find")
-	public Flux<Customer> find( //@formatter:off
+	public Flux<Customer> find(
 		@RequestParam String firstName,
-		@RequestParam String lastName) { //@formatter:on
+		@RequestParam String lastName) {
 		return customerService.findByFirstNameAndLastName(firstName, lastName);
 	}
 

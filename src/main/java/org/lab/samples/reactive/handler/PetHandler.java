@@ -20,7 +20,7 @@ public class PetHandler {
 
 	public Mono<ServerResponse> findById(ServerRequest request) {
 		String id = request.pathVariable("id");
-		Mono<Pet> monoPet = this.repository.findById(id);
+		Mono<Pet> monoPet = repository.findById(id);
 		return ServerResponse.ok().contentType(APPLICATION_JSON).body(monoPet, Pet.class);
 	}
 

@@ -25,13 +25,12 @@ public class InitializationService {
 
 	private void initialize() {
 		log.info("Initializing database");
-		Flux<Customer> customers = Flux.just( //@formatter:off
+		Flux<Customer> customers = Flux.just(
 			customer("John", "Doe"),
 			customer("John", "Smith"),
 			customer("Franz", "Kafka"),
 			customer("Milan", "Kundera"),
-			customer("Paul", "Auster")
-		); //@formatter:on
+			customer("Paul", "Auster"));
 		customerRepository.saveAll(customers).subscribe();
 	}
 
