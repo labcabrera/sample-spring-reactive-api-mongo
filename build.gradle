@@ -6,10 +6,6 @@ plugins {
 	id 'org.sonarqube'					version '2.6.2'
 }
 
-ext {
-	set('springBootVersion',            '2.1.4.RELEASE')
-}
-
 apply plugin: 'io.spring.dependency-management'
 
 group = 'org.lab.samples'
