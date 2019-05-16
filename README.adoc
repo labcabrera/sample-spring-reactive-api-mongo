@@ -1,5 +1,7 @@
 = Spring Reactive API
 
+image:https://travis-ci.org/labcabrera/sample-spring-reactive-api-mongo.svg?branch=master["Build Status", link="https://travis-ci.org/labcabrera/sample-spring-reactive-api-mongo"]
+
 Aplicación reactive de ejemplo basada en WebFlux. La aplicación es la clásica
 https://github.com/spring-projects/spring-petclinic[clínica de mascotas]. 
 
