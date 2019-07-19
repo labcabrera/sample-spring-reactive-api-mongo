@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.lab.samples.reactive.domain.Customer;
 import org.lab.samples.reactive.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,21 +28,17 @@ public class CustomerController {
 	@Autowired
 	private CustomerService customerService;
 
-	@GetMapping
-	public Flux<Customer> findAll() {
-		return customerService.findAll();
-	}
-
 	@GetMapping("/{id}")
 	public Mono<Customer> findOne(@PathVariable String id) {
 		return customerService.findOne(id);
 	}
 
-	@GetMapping("/find")
+	@GetMapping
 	public Flux<Customer> find(
-		@RequestParam String firstName,
-		@RequestParam String lastName) {
-		return customerService.findByFirstNameAndLastName(firstName, lastName);
+		@RequestParam(name = "search", defaultValue = "") String search,
+		@RequestParam(name = "page", defaultValue = "0") Integer page,
+		@RequestParam(name = "size", defaultValue = "10") Integer size) {
+		return customerService.find(search, PageRequest.of(page, size));
 	}
 
 	@PostMapping

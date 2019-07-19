@@ -30,7 +30,19 @@ public class InitializationService {
 			customer("John", "Smith"),
 			customer("Franz", "Kafka"),
 			customer("Milan", "Kundera"),
-			customer("Paul", "Auster"));
+			customer("Paul", "Auster"),
+			customer("John", "Sample01"),
+			customer("John", "Sample02"),
+			customer("John", "Sample03"),
+			customer("John", "Sample04"),
+			customer("John", "Sample05"),
+			customer("John", "Sample06"),
+			customer("John", "Sample07"),
+			customer("John", "Sample08"),
+			customer("John", "Sample09"),
+			customer("John", "Sample10"),
+			customer("John", "Sample11"),
+			customer("John", "Sample12"));
 		customerRepository.saveAll(customers).subscribe();
 	}
 
