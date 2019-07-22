@@ -1,12 +1,13 @@
 package org.lab.samples.reactive.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-@Getter
-@Setter
+@Data
+@EqualsAndHashCode(callSuper = true)
+//@SuperBuilder
 public class Customer extends Person {
 
-	private boolean delete = Boolean.FALSE;
+	private boolean delete;
 
 }

@@ -36,8 +36,8 @@ public class CustomerController {
 	@GetMapping
 	public Flux<Customer> find(
 		@RequestParam(name = "search", defaultValue = "") String search,
-		@RequestParam(name = "page", defaultValue = "0") Integer page,
-		@RequestParam(name = "size", defaultValue = "10") Integer size) {
+		final @RequestParam(name = "page", defaultValue = "0") int page,
+		final @RequestParam(name = "size", defaultValue = "10") int size) {
 		return customerService.find(search, PageRequest.of(page, size));
 	}
 
