@@ -1,28 +1,64 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot'		version '2.1.4.RELEASE'
+	id 'org.springframework.boot'		version '2.1.6.RELEASE'
 	id 'com.palantir.docker'			version '0.20.1'
 	id 'com.palantir.jacoco-coverage'	version '0.4.0'
 	id 'org.sonarqube'					version '2.6.2'
 }
 
+ext {
+	set('springfoxVersion', '3.0.0-SNAPSHOT')
+	set('restQueryEngineVersion', '0.7.1')
+}
+
 apply plugin: 'io.spring.dependency-management'
 
 group = 'org.lab.samples'
+version = version
 sourceCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
 dependencies {
-	compile('org.springframework.boot:spring-boot-starter-webflux')
-	compile('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
-	compile('org.projectlombok:lombok')
+	compile 'org.springframework.boot:spring-boot-starter-webflux'
+	compile 'org.springframework.boot:spring-boot-starter-actuator'
+	compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
+	compile 'org.springframework.integration:spring-integration-webflux'
+	
+	compile "com.github.rutledgepaulv:rest-query-engine:${restQueryEngineVersion}"
+	
+	compile "io.springfox:springfox-swagger2:${springfoxVersion}"
+	compile "io.springfox:springfox-spring-webflux:${springfoxVersion}"
+	compile "io.springfox:springfox-swagger-ui:${springfoxVersion}"
+	compile "io.springfox:springfox-spring-integration-webflux:${springfoxVersion}"
 
-	testCompile('org.springframework.boot:spring-boot-starter-test')
-	testCompile('io.projectreactor:reactor-test')
+	compile 'org.projectlombok:lombok'
 
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	testCompile 'org.springframework.boot:spring-boot-starter-test'
+	testCompile 'io.rest-assured:rest-assured'
+	testCompile 'io.projectreactor:reactor-test'
+}
+
+springBoot {
+	buildInfo {
+		properties {
+			additional = [
+				'springfox-version': "$springfoxVersion",
+			]
+		}
+	}
+}
+
+docker {
+	name "labcabrera/${jar.baseName}"
+	tags 'latest'
+	dockerfile file('Docker/Dockerfile')
+	files jar.archivePath
+	buildArgs(['JAR_FILE': "${jar.archiveName}"])
 }

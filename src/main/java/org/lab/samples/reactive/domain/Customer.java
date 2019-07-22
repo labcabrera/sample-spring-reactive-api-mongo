@@ -1,12 +1,15 @@
 package org.lab.samples.reactive.domain;
 
-import lombok.Getter;
-import lombok.Setter;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-@Getter
-@Setter
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+@Document(collection = "customers")
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class Customer extends Person {
 
-	private boolean delete = Boolean.FALSE;
+	private boolean delete;
 
 }

@@ -2,10 +2,8 @@
 
 image:https://travis-ci.org/labcabrera/sample-spring-reactive-api-mongo.svg?branch=master["Build Status", link="https://travis-ci.org/labcabrera/sample-spring-reactive-api-mongo"]
 
-Aplicación reactive de ejemplo basada en WebFlux. La aplicación es la clásica
-https://github.com/spring-projects/spring-petclinic[clínica de mascotas]. 
-
-Utilizamos _spring-boot-starter-data-mongodb-reactive_ para persistir la información.
+Ejemplo de API REST reactiva documentada con https://springfox.github.io/springfox/[springfox]
+basada en Spring Boot 2.x.
 
 == Reactive Mongo
 
@@ -32,24 +30,23 @@ un `@RestController` y anotando los diferentes métodos de nuestra interface:
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
 
-  @Autowired
-  private CustomerService customerService;
+  @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+  @ApiOperation(value = "Find customer by id", response = Customer.class)
+  Mono<Customer> findOne(@ApiParam(value = "Customer identifier", required = true) @PathVariable String id);
 
-  @GetMapping
-  public Flux<Customer> findAll() { ...	}
+  @RequestMapping(method = RequestMethod.GET)
+  @ApiOperation(value = "Find customers by RSQL", response = Customer.class)
+  Flux<Customer> find(
+    @ApiParam(value = "Search default value", required = false, example = "")
+    @RequestParam(name = "search", defaultValue = "") final String search,
 
-  @GetMapping("/{id}")
-  public Mono<Customer> findOne(@PathVariable String id) { ... }
+    @ApiParam(value = "Page default value", required = false, example = "0")
+    @RequestParam(name = "page", defaultValue = "0") final int page,
 
-  @PostMapping
-  @ResponseStatus(HttpStatus.CREATED)
-  public Mono<Customer> create(@RequestBody Customer customer) { ... }
-
-  @DeleteMapping("/{id}")
-  public Mono<Boolean> delete(@PathVariable String id) { ... }
+    @ApiParam(value = "Size default value", required = false, example = "10")
+    @RequestParam(name = "size", defaultValue = "10") final int size);
 
   // ...
-
 }
 ----
 
@@ -93,6 +90,10 @@ public class PetHandler {
 }
 ----
 
+== Swagger
+
+Para la generación debemos utilizar una versión snapshot de Springfox dado que la última versión 2.x no soporta
+Webflux.
 
 == Probando nuestra API
 
@@ -118,9 +119,9 @@ curl  \
   -H "Content-Type: application/json" \
   http://localhost:8080/api/v1/customers/${customerId}
 
-# Find all customers
+# Find customers using rsql
 
-curl http://localhost:8080/api/v1/customers
+curl "http://localhost:8080/api/v1/customers?search=firstName==John"
 
 # Find customer
 

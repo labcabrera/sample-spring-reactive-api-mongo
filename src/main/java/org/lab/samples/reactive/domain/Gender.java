@@ -1,6 +1,25 @@
 package org.lab.samples.reactive.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonFormat.Shape;
+
+@JsonFormat(shape = Shape.STRING)
 public enum Gender {
 
-	Male, Female
+	MALE("male"),
+
+	FEMALE("female");
+
+	private String code;
+
+	private Gender(String code) {
+		this.code = code;
+	}
+	
+	@JsonValue
+	public String getCode() {
+		return code;
+	}
+
 }

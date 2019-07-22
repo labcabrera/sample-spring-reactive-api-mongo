@@ -18,6 +18,8 @@ public abstract class Person {
 	@NotNull
 	protected String lastName;
 
+	protected Gender gender;
+
 	protected ContactInfo contactInfo;
 
 }

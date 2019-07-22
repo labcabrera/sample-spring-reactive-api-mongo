@@ -2,8 +2,12 @@ package org.lab.samples.reactive.services.impl;
 
 import org.lab.samples.reactive.domain.Customer;
 import org.lab.samples.reactive.repository.CustomerRepository;
+import org.lab.samples.reactive.repository.RsqlParser;
 import org.lab.samples.reactive.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 
 import reactor.core.publisher.Flux;
@@ -14,6 +18,12 @@ public class CustomerServiceImpl implements CustomerService {
 
 	@Autowired
 	private CustomerRepository repository;
+
+	@Autowired
+	private ReactiveMongoTemplate template;
+
+	@Autowired
+	private RsqlParser rsqlParser;
 
 	@Override
 	public Mono<Customer> createCustomer(Customer customer) {
@@ -31,8 +41,12 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public Flux<Customer> findAll() {
-		return repository.findAll();
+	public Flux<Customer> find(String rsql, Pageable pageable) {
+		Query query = rsqlParser.apply(rsql, Customer.class);
+		return template
+			.find(query, Customer.class)
+			.skip(pageable.getPageNumber() * pageable.getPageSize())
+			.take(pageable.getPageSize());
 	}
 
 	@Override
