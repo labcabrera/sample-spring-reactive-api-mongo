@@ -7,6 +7,7 @@ plugins {
 }
 
 ext {
+	set('springfoxVersion', '3.0.0-SNAPSHOT')
 	set('restQueryEngineVersion', '0.7.1')
 }
 
@@ -17,18 +18,28 @@ sourceCompatibility = 1.8
 
 repositories {
 	mavenCentral()
+	maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
 
 dependencies {
 	compile 'org.springframework.boot:spring-boot-starter-webflux'
+	compile 'org.springframework.boot:spring-boot-starter-actuator'
 	compile 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
-	compile 'org.projectlombok:lombok'
+	compile 'org.springframework.integration:spring-integration-webflux'
+	
 	compile "com.github.rutledgepaulv:rest-query-engine:${restQueryEngineVersion}"
+	
+	compile "io.springfox:springfox-swagger2:${springfoxVersion}"
+	compile "io.springfox:springfox-spring-webflux:${springfoxVersion}"
+	compile "io.springfox:springfox-swagger-ui:${springfoxVersion}"
+	compile "io.springfox:springfox-spring-integration-webflux:${springfoxVersion}"
+
+	compile 'org.projectlombok:lombok'
+
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 	testCompile 'io.rest-assured:rest-assured'
 	testCompile 'io.projectreactor:reactor-test'
-
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
 }
