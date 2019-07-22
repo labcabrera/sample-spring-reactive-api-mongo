@@ -7,7 +7,6 @@ import org.springframework.data.annotation.Id;
 import lombok.Data;
 
 @Data
-//@SuperBuilder
 public abstract class Person {
 
 	@Id
@@ -18,6 +17,8 @@ public abstract class Person {
 
 	@NotNull
 	protected String lastName;
+
+	protected Gender gender;
 
 	protected ContactInfo contactInfo;
 

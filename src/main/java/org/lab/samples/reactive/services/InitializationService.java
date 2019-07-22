@@ -1,6 +1,9 @@
 package org.lab.samples.reactive.services;
 
+import org.apache.commons.lang3.RandomStringUtils;
+import org.lab.samples.reactive.domain.ContactInfo;
 import org.lab.samples.reactive.domain.Customer;
+import org.lab.samples.reactive.domain.Gender;
 import org.lab.samples.reactive.repository.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -50,6 +53,10 @@ public class InitializationService {
 		Customer customer = new Customer();
 		customer.setFirstName(firstName);
 		customer.setLastName(lastName);
+		customer.setContactInfo(new ContactInfo());
+		customer.setGender(Gender.MALE)	;
+		customer.getContactInfo().setEmail(String.format("%s-%s@mock.org", firstName, lastName).toLowerCase());
+		customer.getContactInfo().setPhoneNumber(RandomStringUtils.randomNumeric(9));
 		return customer;
 	}
 

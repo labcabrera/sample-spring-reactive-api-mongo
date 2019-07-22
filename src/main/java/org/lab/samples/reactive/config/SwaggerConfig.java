@@ -34,21 +34,24 @@ public class SwaggerConfig {
 
 	@Bean
 	Docket docket(List<SecurityScheme> authorizationTypes) {
-		return new Docket(DocumentationType.SWAGGER_2).forCodeGeneration(true).select()
-				.apis(RequestHandlerSelectors.basePackage("org.lab")).paths(PathSelectors.any()).build()
-				.protocols(Stream.of("http", "https").collect(toSet()))
-				.alternateTypeRules(new RecursiveAlternateTypeRule(resolver,
-						Arrays.asList(
-								AlternateTypeRules.newRule(resolver.resolve(Mono.class, WildcardType.class),
-										resolver.resolve(WildcardType.class)),
-								AlternateTypeRules.newRule(resolver.resolve(ResponseEntity.class, WildcardType.class),
-										resolver.resolve(WildcardType.class)))))
-				.alternateTypeRules(new RecursiveAlternateTypeRule(resolver,
-						Arrays.asList(
-								AlternateTypeRules.newRule(resolver.resolve(Flux.class, WildcardType.class),
-										resolver.resolve(List.class, WildcardType.class)),
-								AlternateTypeRules.newRule(resolver.resolve(ResponseEntity.class, WildcardType.class),
-										resolver.resolve(WildcardType.class)))));
+		return new Docket(DocumentationType.SWAGGER_2)
+			.forCodeGeneration(true)
+			.select()
+			.apis(RequestHandlerSelectors.basePackage("org.lab"))
+			.paths(PathSelectors.any()).build()
+			.protocols(Stream.of("http", "https").collect(toSet()))
+			.alternateTypeRules(new RecursiveAlternateTypeRule(resolver,
+				Arrays.asList(
+					AlternateTypeRules.newRule(resolver.resolve(Mono.class, WildcardType.class),
+						resolver.resolve(WildcardType.class)),
+					AlternateTypeRules.newRule(resolver.resolve(ResponseEntity.class, WildcardType.class),
+						resolver.resolve(WildcardType.class)))))
+			.alternateTypeRules(new RecursiveAlternateTypeRule(resolver,
+				Arrays.asList(
+					AlternateTypeRules.newRule(resolver.resolve(Flux.class, WildcardType.class),
+						resolver.resolve(List.class, WildcardType.class)),
+					AlternateTypeRules.newRule(resolver.resolve(ResponseEntity.class, WildcardType.class),
+						resolver.resolve(WildcardType.class)))));
 	}
 
 }
