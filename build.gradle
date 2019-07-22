@@ -14,6 +14,7 @@ ext {
 apply plugin: 'io.spring.dependency-management'
 
 group = 'org.lab.samples'
+version = version
 sourceCompatibility = 1.8
 
 repositories {
@@ -42,4 +43,22 @@ dependencies {
 	testCompile 'org.springframework.boot:spring-boot-starter-test'
 	testCompile 'io.rest-assured:rest-assured'
 	testCompile 'io.projectreactor:reactor-test'
+}
+
+springBoot {
+	buildInfo {
+		properties {
+			additional = [
+				'springfox-version': "$springfoxVersion",
+			]
+		}
+	}
+}
+
+docker {
+	name "labcabrera/${jar.baseName}"
+	tags 'latest'
+	dockerfile file('Docker/Dockerfile')
+	files jar.archivePath
+	buildArgs(['JAR_FILE': "${jar.archiveName}"])
 }

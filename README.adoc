@@ -90,6 +90,10 @@ public class PetHandler {
 }
 ----
 
+== Swagger
+
+Para la generación debemos utilizar una versión snapshot de Springfox dado que la última versión 2.x no soporta
+Webflux.
 
 == Probando nuestra API
 
