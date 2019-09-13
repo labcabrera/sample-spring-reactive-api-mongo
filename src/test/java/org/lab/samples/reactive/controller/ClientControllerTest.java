@@ -36,7 +36,7 @@ public class ClientControllerTest {
 		RestAssured.given()
 			.port(port)
 			.when()
-			.get("/api/v1/customers/{id}", customer.getId())
+			.get("customers/{id}", customer.getId())
 			.then()
 			.assertThat()
 			.statusCode(HttpStatus.OK.value())
