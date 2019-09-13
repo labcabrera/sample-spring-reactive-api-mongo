@@ -32,7 +32,7 @@ public class CustomerController implements CustomerControllerDefinition {
 	}
 
 	@Override
-	public Mono<Boolean> delete(String id) {
+	public Mono<Customer> delete(String id) {
 		return customerService.delete(id);
 	}
 

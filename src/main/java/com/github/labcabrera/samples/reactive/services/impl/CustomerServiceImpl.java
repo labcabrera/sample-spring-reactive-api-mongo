@@ -61,11 +61,11 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public Mono<Boolean> delete(String id) {
+	public Mono<Customer> delete(String id) {
 		return findOne(id).doOnSuccess(current -> {
 			current.setDelete(true);
 			repository.save(current).subscribe();
-		}).flatMap(blog -> Mono.just(Boolean.TRUE));
+		});
 	}
 
 }

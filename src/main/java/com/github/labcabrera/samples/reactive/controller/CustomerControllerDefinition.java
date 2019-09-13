@@ -43,15 +43,14 @@ public interface CustomerControllerDefinition {
 	@ResponseStatus(HttpStatus.CREATED)
 	Mono<Customer> create(@ApiParam(value = "Customer object", required = true) @RequestBody @Valid Customer customer);
 
-	@DeleteMapping("/{id}")
-	@ApiOperation(value = "Customer deletion")
-	Mono<Boolean> delete(
-		@ApiParam(value = "The customer's id that needs to be deleted") @PathVariable String id);
-
 	@PutMapping("/{id}")
 	@ResponseBody
 	@ApiOperation(value = "Customer update")
 	Mono<Customer> update(
 		@ApiParam(value = "Customer identifier") @PathVariable String id,
 		@ApiParam(value = "Updated customer data", required = true) @RequestBody @Valid Customer customer);
+
+	@DeleteMapping("/{id}")
+	@ApiOperation(value = "Customer deletion")
+	Mono<Customer> delete(@ApiParam(value = "The customer's id that needs to be deleted") @PathVariable String id);
 }
