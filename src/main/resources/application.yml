@@ -1,13 +1,12 @@
 spring:
   data:
     mongodb:
-      host: localhost
+      uri: mongodb://localhost:27017/samples-reactive-api
 
 logging:
   level:
-    root: debug
+    root: info
     org.lab: debug
-    org.mongodb.driver: info
 
 management:
   endpoints:
