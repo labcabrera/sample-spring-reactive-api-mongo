@@ -5,9 +5,8 @@ spring:
 
 logging:
   level:
-    root: debug
+    root: info
     org.lab: debug
-    org.mongodb.driver: info
 
 management:
   endpoints:
