@@ -15,7 +15,7 @@ public class PetClinicRouter {
 
 	@Bean
 	RouterFunction<?> routes(PetHandler handler) {
-		return nest(path("/api/v1/pets"),
+		return nest(path("/pets"),
 			route(RequestPredicates.GET("/{id}"), handler::findById)
 				.andRoute(RequestPredicates.GET(""), handler::findAll)
 				.andRoute(RequestPredicates.POST(""), handler::save)

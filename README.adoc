@@ -2,8 +2,11 @@
 
 image:https://travis-ci.org/labcabrera/sample-spring-reactive-api-mongo.svg?branch=master["Build Status", link="https://travis-ci.org/labcabrera/sample-spring-reactive-api-mongo"]
 
-Ejemplo de API REST reactiva documentada con https://springfox.github.io/springfox/[springfox]
-basada en Spring Boot 2.x.
+Ejemplo de API REST reactiva basada en Spring Boot 2.x con las siguientes características:
+
+* Uso de MongoDB
+* Documentada con https://springfox.github.io/springfox/[springfox] (aún en la versión snapshot de la 3.x)
+* Uso de RSQL para las búsquedas.
 
 == Reactive Mongo
 
@@ -19,6 +22,12 @@ public interface CustomerRepository extends ReactiveMongoRepository<Customer, St
 }
 ----
 
+Hay que tener en cuenta que no podemos utilizar _DBRefs_ en nuestro modelo ya
+que https://stackoverflow.com/questions/50058861/how-to-use-db-references-with-reactive-spring-data-mongodb[no están soportados ni parece que vayan a estarlo].
+
+De este modo debemos aplanar el modelo y tendremos que ir a consultar manualmente las relaciones, a
+diferencia de cuando utilizamos la versión no reactiva de mongo.
+
 == API
 
 Hay dos formas de exponer nuestra API. La primera es similar a la forma no-reactiva, declarando
@@ -27,7 +36,7 @@ un `@RestController` y anotando los diferentes métodos de nuestra interface:
 [source,java]
 ----
 @RestController
-@RequestMapping("/api/v1/customers")
+@RequestMapping("/customers")
 public class CustomerController {
 
   @RequestMapping(value = "/{id}", method = RequestMethod.GET)
@@ -90,6 +99,8 @@ public class PetHandler {
 }
 ----
 
+El inconveniente de este método es que actualmente no es compatible con Springfox.
+
 == Swagger
 
 Para la generación debemos utilizar una versión snapshot de Springfox dado que la última versión 2.x no soporta
@@ -109,7 +120,7 @@ A continuación mostramos algunos ejemplos de llamadas.
 curl \
   -d '{"firstName":"John","lastName":"Doe","contactInfo":{"email": "johndoe@mailserver.org"}}' \
   -H "Content-Type: application/json" \
-  http://localhost:8080/api/v1/customers
+  http://localhost:8080/customers
 
 # Update customer
 
@@ -117,29 +128,29 @@ curl  \
   -X PUT \
   -d '{"firstName":"John","lastName":"Smith","contactInfo":{"email": "johnsmith@mailserver.org","phoneNumber": "555 444 888"}}' \
   -H "Content-Type: application/json" \
-  http://localhost:8080/api/v1/customers/${customerId}
+  http://localhost:8080/customers/${customerId}
 
 # Find customers using rsql
 
-curl "http://localhost:8080/api/v1/customers?search=firstName==John"
+curl -s "http://localhost:8080/customers?search=firstName==John" | python -m json.tool
 
 # Find customer
 
-curl 'http://localhost:8080/api/v1/customers/find?firstName=John&lastName=Doe'
+curl 'http://localhost:8080/customers/find?firstName=John&lastName=Doe'
 
 # Insert pet
 
 curl \
-  -d '{"name":"Chinaski","gender":"Male","customer":{"id":"${customerId}"}}' \
+  -d '{"name":"Chinaski","gender":"male","customerId":"5d35affac380b61397788898"}' \
   -H "Content-Type: application/json" \
-  http://localhost:8080/api/v1/pets
+  http://localhost:8080/pets
 
 # Find pet by id
 
-curl http://localhost:8080/api/v1/pets/${petId}
+curl http://localhost:8080/pets/${petId}
 
 # Find all pets
 
-curl http://localhost:8080/api/v1/pets
+curl http://localhost:8080/pets
 
 ----

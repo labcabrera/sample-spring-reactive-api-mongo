@@ -19,8 +19,8 @@ import io.swagger.annotations.ApiParam;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-@RequestMapping(value = "/api/v1/customers", produces = MediaType.APPLICATION_JSON_VALUE)
-@Api(value = "/customer")
+@RequestMapping(value = "customers", produces = MediaType.APPLICATION_JSON_VALUE)
+@Api(value = "Customers")
 public interface CustomerControllerDefinition {
 
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET)

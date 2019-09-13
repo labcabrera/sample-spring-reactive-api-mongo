@@ -2,6 +2,18 @@ spring:
   data:
     mongodb:
       host: localhost
-      #database: test
-      #username: dummyUsername
-      #password: dummyPassword
+
+logging:
+  level:
+    root: debug
+    org.lab: debug
+    org.mongodb.driver: info
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    health:
+      show-details: always
