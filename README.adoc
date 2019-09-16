@@ -2,6 +2,8 @@
 
 image:https://travis-ci.org/labcabrera/sample-spring-reactive-api-mongo.svg?branch=master["Build Status", link="https://travis-ci.org/labcabrera/sample-spring-reactive-api-mongo"]
 
+image:https://travis-ci.org/labcabrera/sample-spring-reactive-api-mongo.svg?branch=master["Build Status", link="https://travis-ci.org/labcabrera/sample-spring-reactive-api-mongo"]
+
 Ejemplo de API REST reactiva basada en Spring Boot 2.x con las siguientes características:
 
 * Uso de MongoDB

@@ -1,47 +1,45 @@
 package com.github.labcabrera.samples.reactive.controller;
 
-import org.hamcrest.Matchers;
+import org.junit.Assume;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.http.HttpStatus;
-import org.springframework.test.context.ContextConfiguration;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.reactive.server.WebTestClient;
 
 import com.github.labcabrera.samples.reactive.SampleApplication;
 import com.github.labcabrera.samples.reactive.domain.Customer;
-import com.github.labcabrera.samples.reactive.repository.CustomerRepository;
-
-import io.restassured.RestAssured;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.DEFINED_PORT)
-@ContextConfiguration(classes = SampleApplication.class)
+@SpringBootTest(classes = SampleApplication.class, webEnvironment = WebEnvironment.DEFINED_PORT)
 public class ClientControllerTest {
 
 	@Autowired
-	private CustomerRepository customerRepository;
+	private WebTestClient webTestClient;
 
-	@Value("${server.port:8080}")
-	private int port;
+	@Autowired
+	private ReactiveMongoTemplate template;
+
+	private Customer customer;
+
+	@Before
+	public void before() {
+		customer = template.findOne(new Query(), Customer.class).block();
+		Assume.assumeNotNull(customer);
+	}
 
 	@Test
-	public void testFindById() {
-		Customer customer = customerRepository.findByFirstNameAndLastName("John", "Doe").toStream()
-			.findFirst()
-			.orElseThrow(() -> new RuntimeException("Missing data"));
-
-		RestAssured.given()
-			.port(port)
-			.when()
-			.get("customers/{id}", customer.getId())
-			.then()
-			.assertThat()
-			.statusCode(HttpStatus.OK.value())
-			.body("id", Matchers.is(customer.getId()));
+	public void testFindByIdOk() {
+		webTestClient
+			.get()
+			.uri("/customers/{id}", customer.getId())
+			.exchange()
+			.expectStatus().isOk();
 	}
 
 }
